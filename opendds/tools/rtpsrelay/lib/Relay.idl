@@ -1,0 +1,164 @@
+/*
+ *
+ *
+ * Distributed under the OpenDDS License.
+ * See: http://www.opendds.org/license.html
+ */
+
+#include "dds/DdsDcpsCore.idl"
+
+module RtpsRelay {
+
+  // GUID prefix bytes - uniquely specify the participant.
+  typedef octet GuidPrefix_t[12];
+
+  // Key portion of Entity identifier.
+  typedef octet EntityKey_t[3];
+
+  // Uniquely identify each entity within a participant.
+  @final
+  struct EntityId_t {
+    @key EntityKey_t entityKey;
+    @key octet entityKind;
+  };
+
+  // The actual GUID itself.
+  @final
+  struct GUID_t {
+    @key GuidPrefix_t guidPrefix;
+    @key EntityId_t entityId;
+  };
+
+  const string WRITERS_TOPIC_NAME = "Writers";
+
+  @topic
+  struct WriterEntry {
+    @key GUID_t guid;
+
+    string topic_name;
+    string type_name;
+    DDS::DataWriterQos data_writer_qos;
+    DDS::PublisherQos publisher_qos;
+  };
+
+  const string READERS_TOPIC_NAME = "Readers";
+
+  @topic
+  struct ReaderEntry {
+    @key GUID_t guid;
+
+    string topic_name;
+    string type_name;
+    DDS::DataReaderQos data_reader_qos;
+    DDS::SubscriberQos subscriber_qos;
+  };
+
+  const string PARTICIPANTS_TOPIC_NAME = "Participants";
+
+  @topic
+  struct ParticipantEntry {
+    @key GUID_t guid;
+    DDS::UserDataQosPolicy user_data;
+  };
+
+  const string RESPONSIBLE_RELAY_TOPIC_NAME = "Responsible Relay";
+
+  @topic
+  struct GuidNameAddress {
+    @key GUID_t guid;
+    @key string name;
+    string address;
+  };
+
+  typedef sequence<GUID_t> GuidSequence;
+
+  struct RelayHeader {
+    GuidSequence to;
+  };
+
+  struct Duration_t {
+    long sec;
+    unsigned long nanosec;
+  };
+
+  const string PARTICIPANT_STATISTICS_TOPIC_NAME = "Participant Statistics";
+
+  @topic
+  struct ParticipantStatistics {
+    @key GUID_t guid;
+    @key string name;
+    Duration_t interval;
+    unsigned long messages_from;
+    unsigned long long bytes_from;
+    unsigned long messages_to;
+    unsigned long long bytes_to;
+    unsigned long max_directed_gain;
+    unsigned long max_undirected_gain;
+  };
+
+  const string HANDLER_STATISTICS_TOPIC_NAME = "Handler Statistics";
+
+  @topic
+  struct HandlerStatistics {
+    @key GUID_t application_participant_guid;
+    @key string name;
+    Duration_t interval;
+    unsigned long messages_in;
+    unsigned long long bytes_in;
+    Duration_t input_processing_time;
+    unsigned long messages_out;
+    unsigned long long bytes_out;
+    unsigned long messages_dropped;
+    unsigned long long bytes_dropped;
+    Duration_t output_processing_time;
+    unsigned long max_directed_gain;
+    unsigned long max_undirected_gain;
+    unsigned long local_active_participants;
+    unsigned long error_count;
+    unsigned long new_address_count;
+    unsigned long expired_address_count;
+    unsigned long claim_count;
+    unsigned long disclaim_count;
+    unsigned long max_queue_size;
+    Duration_t max_queue_latency;
+  };
+
+  const string RELAY_STATISTICS_TOPIC_NAME = "Relay Statistics";
+
+  @topic
+  struct RelayStatistics {
+    @key GUID_t application_participant_guid;
+    Duration_t interval;
+    unsigned long messages_in;
+    unsigned long long bytes_in;
+    Duration_t input_processing_time;
+    unsigned long messages_out;
+    unsigned long long bytes_out;
+    unsigned long messages_dropped;
+    unsigned long long bytes_dropped;
+    Duration_t output_processing_time;
+    unsigned long max_directed_gain;
+    unsigned long max_undirected_gain;
+    unsigned long error_count;
+    unsigned long new_address_count;
+    unsigned long expired_address_count;
+    unsigned long claim_count;
+    unsigned long disclaim_count;
+    unsigned long max_queue_size;
+    Duration_t max_queue_latency;
+  };
+
+  const string DOMAIN_STATISTICS_TOPIC_NAME = "Domain Statistics";
+
+  @topic
+  struct DomainStatistics {
+    @key GUID_t application_participant_guid;
+    Duration_t interval;
+    unsigned long local_participants;
+    unsigned long local_writers;
+    unsigned long local_readers;
+    unsigned long total_writers;
+    unsigned long total_readers;
+  };
+
+};

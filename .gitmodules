@@ -1,0 +1,3 @@
+[submodule "opendds"]
+	path = opendds
+	url = https://github.com/objectcomputing/OpenDDS.git
