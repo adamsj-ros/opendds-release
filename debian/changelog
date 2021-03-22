@@ -1,0 +1,8 @@
+ros-foxy-opendds (0.1.2-1focal) focal; urgency=high
+
+  * wrapped opendds for ROS2 deployments
+  * Contributors: Jeremy Adams
+
+ -- user <user@email.com>  Sun, 21 Mar 2021 00:00:00 -0000
+
+
